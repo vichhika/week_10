@@ -25,14 +25,17 @@
 
 <body>
 
-  <!-- Navigation -->
-  @include('include.navigation')
+    <div>
+        <!-- Navigation -->
+    @include('include.navigation')
 
-  <!-- Page Header -->
-  @include('include.header')
-  <!-- Main Content -->
-  @include('include.main')
-  
+    <!-- Page Header -->
+    @yield('header')
+    <!-- Main Content -->
+        @yield('contant')
+
+    </div>
+
 
   <hr>
 

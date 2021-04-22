@@ -23,6 +23,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('index');
+        return view('include.home');
+    }
+
+    public function post()
+    {
+        return view('include.post');
+    }
+
+    public function user()
+    {
+        return view('include.user');
     }
 }

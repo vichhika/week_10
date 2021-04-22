@@ -13,10 +13,10 @@
           </li>
             @auth
             <li class="nav-item">
-              <a class="nav-link" href="{{url('/post')}}">Post</a>
+              <a class="nav-link" href="{{route('post')}}">Post</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{url('/user')}}">User rule</a>
+              <a class="nav-link" href="{{route('user')}}">User rule</a>
             </li>
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
