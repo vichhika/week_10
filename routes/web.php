@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('include.home');
+Route::get('/', function(){
+    return redirect()->route('home');
 });
 
 Auth::routes();
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/view/{post}', [App\Http\Controllers\HomeController::class, 'view'])->name('view');
 Route::resource('posts',App\Http\Controllers\PostController::class);
 Route::resource('categories',App\Http\Controllers\CategoryController::class);

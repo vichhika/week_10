@@ -6,6 +6,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function GuzzleHttp\Promise\exception_for;
+
 class CategoryController extends Controller
 {
     /**
@@ -15,7 +17,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::orderby('id','desc')->paginate(10);
         return view('categories.index', ['categories' => $categories]);
     }
 
@@ -41,7 +43,12 @@ class CategoryController extends Controller
             'category' => 'required'
         ]);
 
-        Category::create($request->all());
+        try {
+            Category::create($request->all());
+        } catch (\Exception $th) {
+            return redirect()->route('categories.index')->with('failed','Category already created');
+        }
+        
         return redirect()->route('categories.index')->with('success','Category created successfully');
     }
 
@@ -80,7 +87,12 @@ class CategoryController extends Controller
             'category' => 'required'
         ]);
 
-        $category->update($request->all());
+        try {
+            $category->update($request->all());
+        } catch (\Exception $th) {
+            return redirect()->route('categories.index')->with('failed','Failed to update, that category already created');
+        }
+        
         return redirect()->route('categories.index')->with('success','Category updated successfully');
     }
 
@@ -92,7 +104,12 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->delete();
+        try {
+            $category->delete();
+        } catch (\Exception $e) {
+            return redirect()->route('categories.index')->with('failed','Category cannot delete right now');
+        }
         return redirect()->route('categories.index')->with('success','Category deleted successfully');
+        
     }
 }

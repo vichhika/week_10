@@ -17,11 +17,9 @@ class PostController extends Controller
     public function index()
     {
         $user_id = Auth::id();
-        $posts = Post::where('by_user_id',$user_id)->get();
-        $categories = Category::all();
+        $posts = Post::with('Category')->where('by_user_id',$user_id)->paginate(10);
         return view('posts.index',[
             'posts' => $posts,
-            'categories' => $categories
             ]);
     }
 
@@ -55,7 +53,7 @@ class PostController extends Controller
         $request['by_user_id'] = "{$user_id}";
 
         Post::create($request->all());
-        return redirect()->route('posts.index')->with('success','Blog created successully');
+        return redirect()->route('posts.index')->with('success','Post created successully');
     }
 
     /**
@@ -79,7 +77,8 @@ class PostController extends Controller
     {
         $categories = Category::all();
         return view('posts.edit',[
-            'categories' => $categories
+            'categories' => $categories,
+            'post' => $post
         ]);
     }
 
@@ -92,14 +91,16 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        $user_id = Auth::id();
         $request->validate([
             'title' => 'required',
             'description' => 'required',
+            'by_category_id' => 'required'
         ]);
+        $request['by_user_id'] = "{$user_id}";
 
-        $post->update($request->all(), ['by_user_id' => Auth::id()]);
-
-        return redirect()->route('posts.index')->with('success','Post updated successfully');
+        $post->update($request->all());
+        return redirect()->route('posts.index')->with('success','Post created successully');
     }
 
     /**

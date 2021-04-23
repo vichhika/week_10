@@ -31,7 +31,7 @@
         <tr>
             <td>{{ $i + 1 }}</td>
             <td>{{ $post->title }}</td>
-            <td>{{ $post->by_category_id }}</td>
+            <td>{{ $post->category->category }}</td>
             <td>
                 <form action="{{ route('posts.destroy',$post->id) }}" method="POST">
     
@@ -47,6 +47,9 @@
         @endforeach
 
     </table>
+
+    {{$posts->links()}}
+   
 
 </div>
 @endsection
