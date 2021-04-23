@@ -32,7 +32,7 @@
     <!-- Page Header -->
     @yield('header')
     <!-- Main Content -->
-        @yield('contant')
+        @yield('content')
 
     </div>
 

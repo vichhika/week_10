@@ -1,14 +1,14 @@
 @extends('index')
 
-@section('post')
+@section('category')
 <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                <h2>Posts manager</h2>
+                <h2>Categories manager</h2>
                 <br>
             </div>
             <div class="pull-right">
-                <a class="btn btn-success" href="{{ route('posts.create') }}"> Create New Post</a>
+                <a class="btn btn-success" href="{{ route('categories.create') }}"> Create New Category</a>
             </div>
         </div>
     </div>
@@ -23,23 +23,19 @@
     <table class="table table-bordered">
         <tr>
             <th scope="col">No</th>
-            <th scope="col">Post Title</th>
             <th scope="col">Category</th>
             <th scope="col" width="250px">Action</th>
         </tr>
-        @foreach ($posts as $i => $post)
+        @foreach ($categories as $i => $category)
         <tr>
             <td>{{ $i + 1 }}</td>
-            <td>{{ $post->title }}</td>
-            <td>{{ $post->by_category_id }}</td>
+            <td>{{ $category->category }}</td>
             <td>
-                <form action="{{ route('posts.destroy',$post->id) }}" method="POST">
-    
-                    <a class="btn btn-primary" href="{{ route('posts.edit',$post->id) }}">Edit</a>
-   
+                <form action="{{ route('categories.destroy',$category->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
-      
+                    <a class="btn btn-primary" href="{{ route('categories.edit',$category->id) }}">Edit</a>
+
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </td>
@@ -50,4 +46,4 @@
 
 </div>
 @endsection
-@include('include.post')
+@include('include.category')

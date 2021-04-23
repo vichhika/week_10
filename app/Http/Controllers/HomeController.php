@@ -26,13 +26,4 @@ class HomeController extends Controller
         return view('include.home');
     }
 
-    public function post()
-    {
-        return view('include.post');
-    }
-
-    public function user()
-    {
-        return view('include.user');
-    }
 }

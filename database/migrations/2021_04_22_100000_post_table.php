@@ -17,7 +17,7 @@ class PostTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->foreignId('by_user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('by_category_id')->references('id')->on('category');
+            $table->foreignId('by_category_id')->references('id')->on('categories')->nullable(false)->change();
             $table->text('description');
             $table->timestamps();
         });

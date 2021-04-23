@@ -2,30 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $posts = Post::latest()->pagination(10);
-        return view('posts.index',compact('posts'))->with('i',(\request()->input('page',1)-1)*10);
+        $user_id = Auth::id();
+        $posts = Post::where('by_user_id',$user_id)->get();
+        $categories = Category::all();
+        return view('posts.index',[
+            'posts' => $posts,
+            'categories' => $categories
+            ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        return view('posts.create');
+        $categories = Category::all();
+        return view('posts.create',[
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -36,10 +46,16 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $user_id = Auth::id();
         $request->validate([
             'title' => 'required',
             'description' => 'required',
+            'by_category_id' => 'required'
         ]);
+        $request['by_user_id'] = "{$user_id}";
+
+        Post::create($request->all());
+        return redirect()->route('posts.index')->with('success','Blog created successully');
     }
 
     /**
@@ -50,7 +66,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('posts.show',compact('post'));
+        //
     }
 
     /**
@@ -61,7 +77,10 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.edit',compact('post'));
+        $categories = Category::all();
+        return view('posts.edit',[
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -69,7 +88,7 @@ class PostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Post $post)
     {
@@ -78,7 +97,7 @@ class PostController extends Controller
             'description' => 'required',
         ]);
 
-        $post->update($request->all());
+        $post->update($request->all(), ['by_user_id' => Auth::id()]);
 
         return redirect()->route('posts.index')->with('success','Post updated successfully');
     }
@@ -87,7 +106,7 @@ class PostController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Post $post)
     {

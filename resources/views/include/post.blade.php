@@ -1,4 +1,3 @@
-@extends('index')
 
 @section('header')
     <header class="masthead" style="background-image: url({{asset('assets/img/home-bg.jpg')}})">
@@ -14,4 +13,10 @@
             </div>
         </div>
     </header>
+@endsection
+
+@section('content')
+<div class="container">
+@yield('post')
+</div>
 @endsection
