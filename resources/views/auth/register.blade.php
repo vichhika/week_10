@@ -40,6 +40,17 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('User role') }}</label>
+
+                            <div class="col-md-6">
+                                <select name="role" class="form-control" aria-label="Default select example">
+                                    <option value="editor" selected>Editor</option>
+                                    <option value="admin">Administrator</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">

@@ -28,6 +28,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        // $this->authorize('createCategory',Category::class);
+        if(Auth::user()->cannot('createCategory',Category::class)) abort(403);
         return view('categories.create');
     }
 
@@ -48,7 +50,7 @@ class CategoryController extends Controller
         } catch (\Exception $th) {
             return redirect()->route('categories.index')->with('failed','Category already created');
         }
-        
+
         return redirect()->route('categories.index')->with('success','Category created successfully');
     }
 
@@ -71,6 +73,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        if(Auth::user()->cannot('updateCategory',$category)) abort(403);
         return view('categories.edit',['category' => $category]);
     }
 
@@ -83,6 +86,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        if(Auth::user()->cannot('updateCategory',$category)) abort(403);
         $request->validate([
             'category' => 'required'
         ]);
@@ -92,7 +96,7 @@ class CategoryController extends Controller
         } catch (\Exception $th) {
             return redirect()->route('categories.index')->with('failed','Failed to update, that category already created');
         }
-        
+
         return redirect()->route('categories.index')->with('success','Category updated successfully');
     }
 
@@ -104,12 +108,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        if(Auth::user()->cannot('deleteCategory',$category)) abort(403);
         try {
             $category->delete();
         } catch (\Exception $e) {
             return redirect()->route('categories.index')->with('failed','Category cannot delete right now');
         }
         return redirect()->route('categories.index')->with('success','Category deleted successfully');
-        
+
     }
 }

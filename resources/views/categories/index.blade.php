@@ -7,9 +7,11 @@
                 <h2>Categories manager</h2>
                 <br>
             </div>
+            @can('createCategory',\App\Model\Category::class)
             <div class="pull-right">
                 <a class="btn btn-success" href="{{ route('categories.create') }}"> Create New Category</a>
             </div>
+            @endcan
         </div>
     </div>
     <br>
@@ -38,9 +40,12 @@
                 <form action="{{ route('categories.destroy',$category->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
+                    @can('updateCategory',$category)
                     <a class="btn btn-primary" href="{{ route('categories.edit',$category->id) }}">Edit</a>
-
+                    @endcan
+                    @can('deleteCategory',$category)
                     <button type="submit" class="btn btn-danger">Delete</button>
+                    @endcan
                 </form>
             </td>
         </tr>

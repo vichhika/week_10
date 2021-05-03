@@ -16,8 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $user_id = Auth::id();
-        $posts = Post::with('Category')->where('by_user_id',$user_id)->paginate(10);
+        $posts = Post::with('Category')->latest()->paginate(10);
         return view('posts.index',[
             'posts' => $posts,
             ]);
@@ -30,6 +29,7 @@ class PostController extends Controller
      */
     public function create()
     {
+        if(Auth::user()->cannot('createPost',Post::class)) abort(403);
         $categories = Category::all();
         return view('posts.create',[
             'categories' => $categories
@@ -75,6 +75,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        if(Auth::user()->cannot('updatePost',$post)) abort(403);
         $categories = Category::all();
         return view('posts.edit',[
             'categories' => $categories,
@@ -91,6 +92,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        if(Auth::user()->cannot('updatePost',$post)) abort(403);
         $user_id = Auth::id();
         $request->validate([
             'title' => 'required',
@@ -111,6 +113,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if(Auth::user()->cannot('deletePost',$post)) abort(403);
         $post->delete();
         return redirect()->route('posts.index')->with('success','Post deleted successfully');
     }
